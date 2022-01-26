@@ -51,7 +51,7 @@ private extension WebIntegrator {
     
     //Image downloader
     private func manageImageDownload(url: URL, completion: @escaping ApiCallback) {
-        guard webapiDataSource.shouldUseOwnNetworkInterface else {
+        guard !webapiDataSource.shouldUseExternalImageDownloader else {
             self.fetchInternalImageDownloadRequest(url: url, completion: completion)
             return
         }

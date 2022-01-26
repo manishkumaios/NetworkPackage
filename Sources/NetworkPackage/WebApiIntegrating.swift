@@ -9,6 +9,7 @@ import Foundation
 
 public protocol WebApiIntegrating {
     var shouldUseOwnNetworkInterface: Bool { get }
+    var shouldUseExternalImageDownloader: Bool { get }
 }
 
 public typealias ApiCallback = ((Data?, URLResponse?, Error?) -> Void)
