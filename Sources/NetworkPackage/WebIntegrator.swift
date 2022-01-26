@@ -7,6 +7,7 @@
 
 import Foundation
 
+//Concreate Implementation
 public struct WebIntegrator: WebApiManaging {
     
     private let webapiDataSource: WebApiIntegrating
@@ -15,18 +16,24 @@ public struct WebIntegrator: WebApiManaging {
         self.webapiDataSource = dataSource
     }
     
-   public func fetch(url: URL, completion: @escaping ApiCallback) {
-       self.manageApiRequest(url: url, completion: completion)
+    public func fetch(url: URL, completion: @escaping ApiCallback) {
+        self.manageApiRequest(url: url, completion: completion)
+    }
+    
+    public func downloadImage(url: URL, completion: @escaping ApiCallback)  {
+        self.manageImageDownload(url: url, completion: completion)
     }
 }
 
 private extension WebIntegrator {
-    func manageApiRequest(url: URL, completion: @escaping ApiCallback) {
+    private func manageApiRequest(url: URL, completion: @escaping ApiCallback) {
         guard webapiDataSource.shouldUseOwnNetworkInterface else {
             self.fetchApiRequestWithAlmoFire(url: url, completion: completion)
             return
         }
-        
+        self.fetchInternalRequest(url: url, completion: completion)
+    }
+    private func fetchInternalRequest(url: URL, completion: @escaping ApiCallback) {
         let task = URLSession.shared.dataTask(with: url) { (data: Data?, response: URLResponse?, error: Error?) -> Void in
             //printing stuff
             #if DEBUG
@@ -36,9 +43,36 @@ private extension WebIntegrator {
             completion(data, response ,error)
         }
         task.resume()
-     }
+    }
     
-    func fetchApiRequestWithAlmoFire (url: URL, completion: @escaping ApiCallback) {
+    private func fetchApiRequestWithAlmoFire (url: URL, completion: @escaping ApiCallback) {
+        //AlmoFire
+    }
+    
+    //Image downloader
+    private func manageImageDownload(url: URL, completion: @escaping ApiCallback) {
+        guard webapiDataSource.shouldUseOwnNetworkInterface else {
+            self.fetchInternalImageDownloadRequest(url: url, completion: completion)
+            return
+        }
+        self.fetchInternalRequest(url: url, completion: completion)
+        
+    }
+    
+    //Own component
+    private func fetchInternalImageDownloadRequest(url: URL, completion: @escaping ApiCallback) {
+        let task = URLSession.shared.downloadTask(with: url) { filePath, response, error in
+            guard let tempURL = filePath else {
+                completion(nil, nil, error)
+                return }
+            let data = try? Data(contentsOf: tempURL, options: .alwaysMapped)
+            completion(data, response, error)
+        }
+        task.resume()
+    }
+    
+    //Kingfisher
+    private func fetchExternalImageDownloadRequest(url: URL, completion: @escaping ApiCallback) {
         
     }
 }
