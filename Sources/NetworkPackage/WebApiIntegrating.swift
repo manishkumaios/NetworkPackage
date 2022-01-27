@@ -14,6 +14,6 @@ public protocol WebApiIntegrating {
 
 public typealias ApiCallback = ((Data?, URLResponse?, Error?) -> Void)
 protocol WebApiManaging {
-    func fetch(url: URL, completion: @escaping ApiCallback)
-    func downloadImage(url: URL, completion: @escaping ApiCallback)
+    func fetch(url: URL, params: [AnyHashable: Any]?, requestType: RequestType, completion: @escaping ApiCallback)
+    func downloadImage(url: URL, params: [AnyHashable: Any]?, requestType: RequestType, completion: @escaping ApiCallback)
 }
