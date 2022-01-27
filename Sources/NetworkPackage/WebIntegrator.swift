@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 
 //Concreate Implementation
 public struct WebIntegrator: WebApiManaging {
@@ -47,6 +48,10 @@ private extension WebIntegrator {
     
     private func fetchApiRequestWithAlmoFire (url: URL, completion: @escaping ApiCallback) {
         //AlmoFire
+        let request = AF.request(url.absoluteString)
+        request.responseData(completionHandler: { dataResponse in
+            completion(dataResponse.data, dataResponse.response, dataResponse.error)
+        })
     }
     
     //Image downloader
