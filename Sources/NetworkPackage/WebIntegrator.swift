@@ -27,7 +27,7 @@ public struct WebIntegrator: WebApiManaging {
         self.webapiDataSource = dataSource
     }
     
-    func fetch(url: URL, params: [AnyHashable: Any]?, requestType: RequestType, completion: @escaping ApiCallback) {
+    public func fetch(url: URL, params: [AnyHashable: Any]?, requestType: RequestType, completion: @escaping ApiCallback) {
         self.manageApiRequest(url: url, params: params, requestType: requestType, completion: completion)
     }
     
